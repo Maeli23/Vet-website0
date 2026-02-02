@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Vets</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{{url_for('Index')}}">Vet Website</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('about')}}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('contact')}}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('vets') }}">Available Vets</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>Available Vets</h1>
+        <ul id="vets-list">
+            <li>
+                <img src="/static/images/dr wesley.jpeg" width="190" height="120" alt="dr wesley marsai">
+                <h2>Dr Wesley Marsai</h2>
+                <p>Credentials: Specialist in exotic animals</p>
+                <p>Achievements: DVM</p>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#vetModal" onclick="showVetInfo(1, 'Dr Wesley Marsai', 'Specialist in exotic animals', 'DVM', 'drwesley@example.com', '123-456-7890')">View Details</button>
+            </li>
+            <li>
+                <img src="/static/images/dr k.jpeg" width="190" height="120" alt="Dr David Kelly">
+                <h2>Dr David Kelly</h2>
+                <p>Credentials: Veterinarian of the Year 2018</p>
+                <p>Achievements: DVM, PhD</p>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#vetModal" onclick="showVetInfo(2, 'Dr David Kelly', 'Veterinarian of the Year 2018', 'DVM, PhD', 'drdavid@example.com', '234-567-8901')">View Details</button>
+            </li>
+            <li>
+                <img src="/static/images/dr leah.jpeg" width="190" height="120" alt="Dr Leah Kalondu">
+                <h2>Dr Leah Kalondu</h2>
+                <p>Credentials: Wrote 5 books on vet Medicine</p>
+                <p>Achievements: DVM, PhD</p>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#vetModal" onclick="showVetInfo(3, 'Dr Leah Kalondu', 'Wrote 5 books on vet Medicine', 'DVM, PhD', 'drleah@example.com', '345-678-9012')">View Details</button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="modal fade" id="vetModal" tabindex="-1" aria-labelledby="vetModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="vetModalLabel">Vet Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Name:</strong> <span id="vetName"></span></p>
+                    <p><strong>Credentials:</strong> <span id="vetCredentials"></span></p>
+                    <p><strong>Achievements:</strong> <span id="vetAchievements"></span></p>
+                    <p><strong>Email:</strong> <span id="vetEmail"></span></p>
+                    <p><strong>Phone:</strong> <span id="vetPhone"></span></p>
+                    <h5>Book an Appointment</h5>
+                    <form id="appointmentForm" onsubmit="submitBookingForm(event)">
+                        <input type="hidden" id="vetId" name="vet_id">
+                        <div class="form-group">
+                            <label for="appointmentDate">Date</label>
+                            <input type="date" class="form-control" id="appointmentDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointmentTime">Time</label>
+                            <input type="time" class="form-control" id="appointmentTime" name="time" required>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', (event) => {
+                                  let today = new Date().toISOString().split('T')[0];
+                                  document.getElementById('appointmentDate').setAttribute('min', today);
+                                });
+                              </script>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea id="notes" name="notes" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Booking</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body md5">
+                    <h5>Booking Details</h5>
+                    <p><strong>Date:</strong> <span id="confirmDate"></span></p>
+                    <p><strong>Time:</strong> <span id="confirmTime"></span></p>
+                    <p><strong>Notes:</strong> <span id="confirmNotes"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Vet Website</p>
+        <div class="social-media">
+            <a href="https://facebook.com">Facebook</a>
+            <a href="https://twitter.com">Twitter</a>
+            <a href="https://instagram.com">Instagram</a>
+        </div>
+    </footer>
+
+    <script>
+        function showVetInfo(id, name, credentials, achievements, email, phone) {
+            document.getElementById('vetName').innerText = name;
+            document.getElementById('vetCredentials').innerText = credentials;
+            document.getElementById('vetAchievements').innerText = achievements;
+            document.getElementById('vetEmail').innerText = email;
+            document.getElementById('vetPhone').innerText = phone;
+            document.getElementById('vetId').value = id;
+        }
+
+        function formatTimeTo12Hour(time) {
+            const [hours, minutes] = time.split(':');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            return `${formattedHours}:${minutes} ${ampm}`;
+        }
+
+        function submitBookingForm(event) {
+            // Prevent default form submission
+            event.preventDefault();
+
+            // Collect form data
+            const vetId = document.getElementById('vetId').value;
+            const appointmentDate = document.getElementById('appointmentDate').value;
+            const appointmentTime = document.getElementById('appointmentTime').value;
+            const notes = document.getElementById('notes').value;
+
+            const formattedTime = formatTimeTo12Hour(appointmentTime);
+
+            document.getElementById('confirmDate').innerText = appointmentDate;
+            document.getElementById('confirmTime').innerText = formattedTime;
+            document.getElementById('confirmNotes').innerText = notes;
+
+            $('#vetModal').modal('hide');
+            $('#confirmationModal').modal('show');
+        }
+    </script>
+</body>
+</html>
